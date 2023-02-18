@@ -26,7 +26,7 @@ function createImageCardsMarkup(galleryItems) {
         .join('');
 }
 
-var lightbox = new SimpleLightbox('.gallery a', {
+new SimpleLightbox('.gallery a', {
     captionDelay: 250,
     captionsData: "alt",
     captionPosition: 'bottom',

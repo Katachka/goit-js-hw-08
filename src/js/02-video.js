@@ -22,17 +22,4 @@ const STORAGE_KEY = "videoplayer-current-time";
 player.on('timeupdate', throttle(currentTime, 1000));
 
 // відновлення відтворення зі збереженої позиції.
-player.setCurrentTime(localStorage.getItem(STORAGE_KEY)).then(function (seconds) {
-    console.log(localStorage.getItem(STORAGE_KEY));
-    // seconds = the actual time that the player seeked to
-}).catch(function(error) {
-    switch (error.name) {
-        case 'RangeError':
-            // the time was less than 0 or greater than the video’s duration
-            break;
-
-        default:
-            // some other error occurred
-            break;
-    }
-});
+player.setCurrentTime(localStorage.getItem(STORAGE_KEY));
