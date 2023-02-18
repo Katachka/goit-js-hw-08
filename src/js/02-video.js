@@ -1,9 +1,9 @@
-import Player from "@vimeo/player";
+import Player from '@vimeo/player';
 import throttle from 'lodash.throttle';
 
-const iframe = document.querySelector('iframe');
+    const iframe = document.querySelector('iframe');
     const player = new Player(iframe);
-
+    
     player.on('play', function() {
         console.log('played the video!');
     });
@@ -12,16 +12,27 @@ const iframe = document.querySelector('iframe');
         console.log('title:', title);
     });
 
-    // curent
-const onPlay = function(data) {
-    // data is an object containing properties specific to that event
-};
 
-player.on('play', onPlay);
+const STORAGE_KEY = "videoplayer-current-time";
+    // колбек функція, дані в секундах. В сховище записує ключ:значення(поточний час:сек)
+    const currentTime = function (data) {
+    localStorage.setItem(STORAGE_KEY, data.seconds);
+}
+// on(подія, колбек), відтворення оновлювався у сховищі 1s
+player.on('timeupdate', throttle(currentTime, 1000));
 
-// If later on you decide that you don’t need to listen for play anymore.
-player.off('play', onPlay);
+// відновлення відтворення зі збереженої позиції.
+player.setCurrentTime(localStorage.getItem(STORAGE_KEY)).then(function (seconds) {
+    console.log(localStorage.getItem(STORAGE_KEY));
+    // seconds = the actual time that the player seeked to
+}).catch(function(error) {
+    switch (error.name) {
+        case 'RangeError':
+            // the time was less than 0 or greater than the video’s duration
+            break;
 
-// Alternatively, `off` can be called with just the event name to remove all
-// listeners.
-player.off('play');
+        default:
+            // some other error occurred
+            break;
+    }
+});
